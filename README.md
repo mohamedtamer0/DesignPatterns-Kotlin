@@ -37,7 +37,7 @@
 
 ## Creational design patterns
 
-### Singleton
+- Singleton
 
 The singleton pattern ensures that only one object of a particular class is ever created. All further references to objects of the singleton class refer to the same underlying instance. There are very few applications, do not overuse this pattern!
 
@@ -79,4 +79,110 @@ Counter 1 : 2
 Counter 2 : 2
 Counter 1 : 4
 Counter 2 : 4
+```
+##
+## prototype
+The Prototype pattern delegates the cloning process to the actual objects that are being cloned. The pattern declares a common interface for all objects that support cloning. This interface lets you clone an object without coupling your code to the class of that object. Usually, such an interface contains just a single clone method.
+
+The implementation of the clone method is very similar in all classes. The method creates an object of the current class and carries over all of the field values of the old object into the new one. You can even copy private fields because most programming languages let objects access private fields of other objects that belong to the same class.
+
+An object that supports cloning is called a prototype. When your objects have dozens of fields and hundreds of possible configurations, cloning them might serve as an alternative to subclassing.
+
+### Example:
+
+
+```Kotlin
+import java.util.ArrayList
+
+class WordDocument constructor(var text: String = "", private var images: ArrayList<String> = ArrayList<String>()) : Cloneable {
+
+
+    init {
+        println("-----Init-----")
+    }
+
+    fun addImage(image: String) = images.add(image)
+
+    fun showDocument() {
+        println("-----Start-----")
+        println("Text: $text")
+        println("Images List: ")
+        images.map {
+            println("Image name: $it")
+        }
+        println("-----End-----")
+    }
+
+    fun cloneTo(): WordDocument? {
+        try {
+            val copy: WordDocument = super.clone() as WordDocument
+            copy.text = this.text
+            copy.images = this.images.clone() as ArrayList<String>
+            return copy
+        } catch (e: CloneNotSupportedException) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+}
+```
+
+### Usage :
+```Kotlin
+fun main() {
+    val originDoc: WordDocument = WordDocument().apply {
+        text = "This is a document"
+        addImage("Image 1")
+        addImage("Image 2")
+        addImage("Image 3")
+        showDocument()
+
+
+    }
+
+    val copyDoc: WordDocument? = originDoc.cloneTo()?.apply {
+        showDocument()
+        text = "This is a copy document"
+        addImage("A new image")
+        showDocument()
+    }
+    copyDoc!!.showDocument()
+}
+```
+## Output:
+
+```code
+-----Init-----
+-----Start-----
+Text: This is a document
+Images List: 
+Image name: Image 1
+Image name: Image 2
+Image name: Image 3
+-----End-----
+-----Start-----
+Text: This is a document
+Images List: 
+Image name: Image 1
+Image name: Image 2
+Image name: Image 3
+-----End-----
+-----Start-----
+Text: This is a copy document
+Images List: 
+Image name: Image 1
+Image name: Image 2
+Image name: Image 3
+Image name: A new image
+-----End-----
+-----Start-----
+Text: This is a copy document
+Images List: 
+Image name: Image 1
+Image name: Image 2
+Image name: Image 3
+Image name: A new image
+-----End-----
+
 ```
