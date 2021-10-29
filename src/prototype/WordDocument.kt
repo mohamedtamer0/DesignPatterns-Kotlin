@@ -1,16 +1,13 @@
 package prototype
 
 import java.util.ArrayList
+class WordDocument constructor(
+    var text: String = "",
+    private var images: ArrayList<String> = ArrayList<String>())
+    : Cloneable {
 
-class WordDocument constructor(var text: String = "", private var images: ArrayList<String> = ArrayList<String>()) : Cloneable {
-
-
-    init {
-        println("-----Init-----")
-    }
-
+    init { println("-----Init-----") }
     fun addImage(image: String) = images.add(image)
-
     fun showDocument() {
         println("-----Start-----")
         println("Text: $text")
@@ -18,8 +15,7 @@ class WordDocument constructor(var text: String = "", private var images: ArrayL
         images.map {
             println("Image name: $it")
         }
-        println("-----End-----")
-    }
+        println("-----End-----") }
 
     fun cloneTo(): WordDocument? {
         try {
@@ -27,12 +23,9 @@ class WordDocument constructor(var text: String = "", private var images: ArrayL
             copy.text = this.text
             copy.images = this.images.clone() as ArrayList<String>
             return copy
-        } catch (e: CloneNotSupportedException) {
-            e.printStackTrace()
-        }
+        } catch (e: CloneNotSupportedException) { e.printStackTrace() }
         return null
     }
-
 }
 
 
@@ -42,18 +35,13 @@ fun main() {
         addImage("Image 1")
         addImage("Image 2")
         addImage("Image 3")
-        showDocument()
-
-
-    }
+        showDocument() }
 
     val copyDoc: WordDocument? = originDoc.cloneTo()?.apply {
         showDocument()
         text = "This is a copy document"
         addImage("A new image")
-        showDocument()
-    }
+        showDocument() }
     copyDoc!!.showDocument()
-
 
 }
