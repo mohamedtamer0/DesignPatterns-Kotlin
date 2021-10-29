@@ -1,4 +1,4 @@
-package `Singleton-pattern`
+package singletonpattern
 
 
 fun main() {
