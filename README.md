@@ -94,7 +94,8 @@ An object that supports cloning is called a prototype. When your objects have do
 ```Kotlin
 import java.util.ArrayList
 
-class WordDocument constructor(var text: String = "", private var images: ArrayList<String> = ArrayList<String>()) : Cloneable {
+class WordDocument 
+constructor(var text: String = "", private var images: ArrayList<String> = ArrayList<String>()) : Cloneable {
 
 
     init {
@@ -186,3 +187,59 @@ Image name: A new image
 -----End-----
 
 ```
+
+
+##
+## Builder
+The builder pattern is used to create complex objects with constituent parts that must be created in the same order or using a specific algorithm. An external class controls the construction algorithm.
+
+### Example:
+
+
+```kotlin
+data class Car
+constructor(var color: String, var licensePlate: String, var brand: String) {
+
+    private constructor(builder: Builder) : this(
+        builder.color,
+        builder.licensePlate,
+        builder.brand
+    )
+
+    class Builder {
+        lateinit var color: String
+        lateinit var licensePlate: String
+        lateinit var brand: String
+
+        fun color(init: Builder.() -> String) = apply { color = init() }
+        fun licensePlate(init: Builder.() -> String) = apply { licensePlate = init() }
+        fun brand(init: Builder.() -> String) = apply { brand = init() }
+    }
+
+    companion object {
+        fun build(init: Builder.() -> Unit) = Car(Builder().apply(init))
+    }
+
+}
+```
+
+## Usage:
+
+```kotlin
+    val car1 = Car.build {
+        brand = "Audi"
+        color = "Blue"
+        licensePlate = "C88888"
+    }
+    println(car1)
+```
+
+
+## Output:
+
+```code
+Car(color=Blue, licensePlate=C88888, brand=Audi)
+```
+
+
+
