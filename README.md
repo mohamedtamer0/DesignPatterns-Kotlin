@@ -242,4 +242,474 @@ Car(color=Blue, licensePlate=C88888, brand=Audi)
 ```
 
 
+##
+## Factory Method
+The factory pattern is used to replace class constructors, abstracting the process of object generation so that the type of the object instantiated can be determined at run-time.
+
+### Example:
+
+```kotlin
+interface Cake {
+    fun prepareMaterials();
+    fun banking();
+}
+
+```
+
+```kotlin
+class MangoCake : Cake {
+    override fun prepareMaterials() {
+        println("prepare Mango Cream")
+    }
+
+    override fun banking() {
+        println("Baking ten minutes")
+    }
+}
+
+```
+
+```kotlin
+abstract class Factory {
+    abstract fun <T : Cake> createProduct(clz:Class<T>): T?
+}
+
+```
+
+```kotlin
+class CakeFactory : Factory() {
+    override fun <T : Cake> createProduct(clz: Class<T>): T? {
+        var cake: Cake? = null
+        try {
+            cake = Class.forName(clz.name).getDeclaredConstructor().newInstance() as Cake
+        }catch (e : Exception) {
+            e.printStackTrace()
+        }
+        return cake as T?
+    }
+}
+
+```
+
+
+
+### Usage :
+
+```kotlin
+    val factory : Factory = CakeFactory()
+    val mangoCake = factory.createProduct(MangoCake::class.java)?.apply {
+        prepareMaterials()
+        banking()
+    }
+```
+
+### Outpu:
+
+```code
+prepare Mango Cream
+Baking ten minutes
+```
+
+
+
+
+##
+## Abstract Factory
+The abstract factory pattern is used to provide a client with a set of related or dependant objects. The "family" of objects created by the factory are determined at run-time.
+
+### Example:
+
+```kotlin
+abstract class CakeFactory {
+    abstract fun cream():CakeCream
+    abstract fun style():CakeStyle
+}
+
+```
+
+```kotlin
+abstract class CakeCream {
+    abstract fun cream()
+}
+
+```
+
+```kotlin
+abstract class CakeStyle {
+    abstract fun style()
+}
+```
+
+```kotlin
+class HeartStyle:CakeStyle() {
+    override fun style() {
+        println("Heart Style")
+    }
+}
+
+```
+
+```kotlin
+class MangoCream:CakeCream() {
+    override fun cream() {
+        println("Mango Cream")
+    }
+}
+```
+
+```kotlin
+class MangoHeartCake : CakeFactory(){
+    override fun cream(): CakeCream {
+        return MangoCream()
+    }
+
+    override fun style(): CakeStyle {
+        return HeartStyle()
+    }
+}
+
+```
+
+
+
+
+### Usage :
+
+```kotlin
+    val mangoHeartCake: CakeFactory = MangoHeartCake()
+    mangoHeartCake.cream().cream()
+    mangoHeartCake.style().style()
+
+    println("=================")
+
+    val mangoSquareCake: CakeFactory = MangoSquareCake()
+    mangoSquareCake.cream().cream()
+    mangoSquareCake.style().style()
+```
+
+### Outpu:
+
+```code
+Mango Cream
+Heart Style
+=================
+Mango Cream
+Square Style
+```
+
+
+##
+## Structural Patterns : 
+
+## Protection Proxy
+The proxy pattern is used to provide a surrogate or placeholder object, which references an underlying object. Protection proxy is restricting access.
+
+### Example:
+
+```kotlin
+interface IPicker {
+    fun receiveMessage()
+    fun takeCourier()
+    fun signatureAcceptance()
+}
+
+```
+
+```kotlin
+class RealPicker:IPicker {
+    override fun receiveMessage() {
+        println("Receive text Message")
+    }
+
+    override fun takeCourier() {
+        println("Take the Courier")
+    }
+
+    override fun signatureAcceptance() {
+        println("Signature Acceptance")
+    }
+}
+
+```
+
+```kotlin
+class ProxyPicker(private val picker: IPicker) : IPicker by picker
+
+```
+
+
+
+### Usage :
+
+```kotlin
+    val picker:IPicker  = RealPicker()
+    val proxyPicker = ProxyPicker(picker)
+    proxyPicker.receiveMessage()
+    proxyPicker.takeCourier()
+    proxyPicker.signatureAcceptance()
+```
+
+### Outpu:
+
+```code
+Receive text Message
+Take the Courier
+Signature Acceptance
+```
+
+
+
+## Decorator
+The decorator pattern is used to extend or alter the functionality of objects at run-time by wrapping them in an object of a decorator class. This provides a flexible alternative to using inheritance to modify behaviour.
+
+### Example:
+
+```kotlin
+interface Cake {
+    fun make()
+}
+
+```
+
+```kotlin
+class CakeEmbryo : Cake {
+    override fun make() {
+        println("Baking Cake")
+    }
+}
+
+```
+
+```kotlin
+open class DecoratorCake constructor(val cake : Cake): Cake by cake
+
+```
+
+```kotlin
+class FruitCake constructor(cake:Cake) :DecoratorCake(cake) {
+
+    override fun make() {
+        addSomeFruit()
+        super.make()
+    }
+
+    private fun addSomeFruit() {
+        println("Add Some Fruit")
+    }
+
+}
+
+```
+
+
+
+### Usage :
+
+```kotlin
+    val cake: Cake = CakeEmbryo()
+    cake.make()
+
+    println("--------Decorate Fruit Cake--------")
+    val fruitCake: DecoratorCake = FruitCake(cake)
+    fruitCake.make()
+```
+
+### Outpu:
+
+```code
+Baking Cake
+--------Decorate Fruit Cake--------
+Add Some fruit
+Baking Cake
+```
+
+
+## Adapter
+The adapter pattern is used to provide a link between two otherwise incompatible types by wrapping the "adaptee" with a class that supports the interface required by the client.
+
+### Example:
+
+```kotlin
+interface VoltFive {
+    fun provideVoltFive():Int
+}
+
+```
+
+```kotlin
+class Volt220 {
+
+    fun provideVolt220(): Int {
+        return 220
+    }
+}
+
+```
+
+```kotlin
+class VoltAdapter(private val volt220: Volt220) : VoltFive {
+
+    override fun provideVoltFive(): Int {
+        val volt = volt220.provideVolt220()
+        return 5
+    }
+
+    fun provideVolt220(): Int {
+        return volt220.provideVolt220()
+    }
+}
+
+```
+
+
+### Usage :
+
+```kotlin
+    val volt220 = Volt220()
+    val adapter = VoltAdapter(volt220)
+
+    val volt = adapter.provideVoltFive()
+    println("After adapter, the volt is : $volt")
+```
+
+### Outpu:
+
+```code
+After adapter, the volt is :5
+```
+
+
+
+
+## Facade
+The facade pattern is used to define a simplified interface to a more complex subsystem.
+
+### Example:
+
+```kotlin
+interface Italykitchen {
+
+    fun lasagneWithTomatoAndCheese()
+    fun prawnRisotto()
+    fun creamCaramel()
+}
+
+```
+
+```kotlin
+class ItalykitchenImpl : Italykitchen {
+    override fun lasagneWithTomatoAndCheese() {
+        println("Lasagne With Tomato And Cheese")
+    }
+
+    override fun prawnRisotto() {
+        println("Prawn Risotto")
+    }
+
+    override fun creamCaramel() {
+        println("Cream Caramel")
+    }
+}
+
+```
+
+```kotlin
+interface Frenchkitchen {
+
+    fun bouillabaisse()
+    fun cassoulet()
+    fun pouleAuPot()
+
+}
+
+```
+
+```kotlin
+class FrenchkitchenImpl : Frenchkitchen {
+    override fun bouillabaisse() {
+        println("Bouillabaisse")
+    }
+
+    override fun cassoulet() {
+        println("Cassoulet")
+    }
+
+    override fun pouleAuPot() {
+        println("PouleAuPot")
+    }
+}
+
+```
+
+```kotlin
+class Menu {
+    private val italykitchen: Italykitchen
+    private val frenchkitchen: Frenchkitchen
+
+    init {
+        italykitchen = ItalykitchenImpl()
+        frenchkitchen = FrenchkitchenImpl()
+    }
+
+    fun bouillabaisse() {
+        frenchkitchen.bouillabaisse()
+    }
+
+    fun cassoulet() {
+        frenchkitchen.cassoulet()
+    }
+
+    fun pouleAuPot() {
+        frenchkitchen.pouleAuPot()
+    }
+
+    fun lasagneWithTomatoAndCheese() {
+        italykitchen.lasagneWithTomatoAndCheese()
+    }
+
+    fun prawnRisotto() {
+        italykitchen.prawnRisotto()
+    }
+
+    fun creamCaramel() {
+        italykitchen.creamCaramel()
+    }
+
+}
+
+```
+
+
+### Usage :
+
+```kotlin
+    val menu = Menu()
+    println("Customer order")
+    menu.lasagneWithTomatoAndCheese()
+    menu.creamCaramel()
+
+    println("===========New Order==========")
+    println("Customer two orders")
+    menu.bouillabaisse()
+    menu.prawnRisotto()
+```
+
+### Outpu:
+
+```code
+Customer order
+Lasagne With Tomato And Cheese
+Cream Caramel
+===========New Order==========
+Customer two orders
+Bouillabaisse
+Prawn Risotto
+```
+
+
+
+
+
+
+
 
