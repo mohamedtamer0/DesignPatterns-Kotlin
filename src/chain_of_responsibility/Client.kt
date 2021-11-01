@@ -1,8 +1,8 @@
 package chain_of_responsibility
 
 fun main() {
-    val tutor:Tutor = Tutor()
-    val secretary:Secretary = Secretary()
+    val tutor = Tutor()
+    val secretary = Secretary()
     val dean = Dean()
     val principal = Principal()
 
