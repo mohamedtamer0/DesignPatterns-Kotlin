@@ -37,6 +37,10 @@
 
 ## Creational design patterns
 
+>In software engineering, creational design patterns are design patterns that deal with object creation mechanisms, trying to create objects in a manner suitable to the situation. The basic form of object creation could result in design problems or added complexity to the design. Creational design patterns solve this problem by somehow controlling this object creation.
+>
+
+
 - Singleton
 
 The singleton pattern ensures that only one object of a particular class is ever created. All further references to objects of the singleton class refer to the same underlying instance. There are very few applications, do not overuse this pattern!
@@ -422,6 +426,9 @@ Square Style
 
 ##
 ## Structural Patterns : 
+
+>In software engineering, structural design patterns are design patterns that ease the design by identifying a simple way to realize relationships between entities.
+>
 
 ## Protection Proxy
 The proxy pattern is used to provide a surrogate or placeholder object, which references an underlying object. Protection proxy is restricting access.
