@@ -21,7 +21,7 @@
 
 ## Behavioral design patterns
 - Chain of responsibility
-- Command
+- commandpatterns
 - Interpreter
 - Iterator
 - Mediator
