@@ -1,7 +1,7 @@
 package commandpatterns
 
 class CommandProcessor {
-    val queue = ArrayList<OrderCommand>()
+    private val queue = ArrayList<OrderCommand>()
 
     fun addToQueue(orderCommand: OrderCommand) :CommandProcessor =
         apply {
@@ -14,3 +14,6 @@ class CommandProcessor {
             queue.clear()
         }
 }
+
+
+
