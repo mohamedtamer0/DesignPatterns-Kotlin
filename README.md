@@ -24,7 +24,7 @@
 - commandpatterns
 - Interpreter
 - Iterator
-- Mediator
+- mediator
 - Memento
 - Null Object
 - Observer
