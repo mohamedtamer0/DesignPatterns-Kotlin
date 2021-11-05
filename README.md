@@ -3,7 +3,7 @@
 - In software engineering, a design pattern is a general repeatable solution to a commonly occurring problem in software design. A design pattern isn't a finished design that can be transformed directly into code. It is a description or template for how to solve a problem that can be used in many different situations.
 ## Creational design patterns
 - Singleton
-- prototype
+- Creationaldesignpattern.prototype
 - Object Pool
 - Factory Method
 - Builder
@@ -21,10 +21,10 @@
 
 ## Behavioral design patterns
 - Chain of responsibility
-- commandpatterns
+- Behavioraldesignpatterns.commandpatterns
 - Interpreter
 - Iterator
-- mediator
+- Behavioraldesignpatterns.mediator
 - Memento
 - Null Object
 - Observer
@@ -90,17 +90,17 @@ Counter 1 : 4
 Counter 2 : 4
 ```
 ##
-## prototype
-The Prototype pattern delegates the cloning process to the actual objects that are being cloned. The patte![prototype]
+## Creationaldesignpattern.prototype
+The Prototype pattern delegates the cloning process to the actual objects that are being cloned. The patte![Creationaldesignpattern.prototype]
 rn declares a common interface for all objects that support cloning. This interface lets you clone an object without coupling your code to the class of that object. Usually, such an interface contains just a single clone method.
 
 The implementation of the clone method is very similar in all classes. The method creates an object of the current class and carries over all of the field values of the old object into the new one. You can even copy private fields because most programming languages let objects access private fields of other objects that belong to the same class.
 
-An object that supports cloning is called a prototype. When your objects have dozens of fields and hundreds of possible configurations, cloning them might serve as an alternative to subclassing.
+An object that supports cloning is called a Creationaldesignpattern.prototype. When your objects have dozens of fields and hundreds of possible configurations, cloning them might serve as an alternative to subclassing.
 
 ## UML :
 
-<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/prototype.png"/>
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/Creationaldesignpattern.prototype.png"/>
 
 ### Example:
 
@@ -205,11 +205,11 @@ Image name: A new image
 
 ##
 ## Builder
-The builder pattern is used to create complex objects with constituent parts that must be created in the same order or using a specific algorithm. An external class controls the construction algorithm.
+The Creationaldesignpattern.builder pattern is used to create complex objects with constituent parts that must be created in the same order or using a specific algorithm. An external class controls the construction algorithm.
 
 ## UML :
 
-<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/builder.png"/>
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/Creationaldesignpattern.builder.png"/>
 
 ### Example:
 
@@ -218,10 +218,10 @@ The builder pattern is used to create complex objects with constituent parts tha
 data class Car
 constructor(var color: String, var licensePlate: String, var brand: String) {
 
-    private constructor(builder: Builder) : this(
-        builder.color,
-        builder.licensePlate,
-        builder.brand
+    private constructor(Creationaldesignpattern.builder: Builder) : this(
+        Creationaldesignpattern.builder.color,
+        Creationaldesignpattern.builder.licensePlate,
+        Creationaldesignpattern.builder.brand
     )
 
     class Builder {
@@ -262,7 +262,7 @@ Car(color=Blue, licensePlate=C88888, brand=Audi)
 
 ##
 ## Factory Method
-The factory pattern is used to replace class constructors, abstracting the process of object generation so that the type of the object instantiated can be determined at run-time.
+The Creationaldesignpattern.factory pattern is used to replace class constructors, abstracting the process of object generation so that the type of the object instantiated can be determined at run-time.
 
 ## UML :
 
@@ -318,8 +318,8 @@ class CakeFactory : Factory() {
 ### Usage :
 
 ```kotlin
-    val factory : Factory = CakeFactory()
-    val mangoCake = factory.createProduct(MangoCake::class.java)?.apply {
+    val Creationaldesignpattern.factory : Factory = CakeFactory()
+    val mangoCake = Creationaldesignpattern.factory.createProduct(MangoCake::class.java)?.apply {
         prepareMaterials()
         banking()
     }
@@ -337,7 +337,7 @@ Baking ten minutes
 
 ##
 ## Abstract Factory
-The abstract factory pattern is used to provide a client with a set of related or dependant objects. The "family" of objects created by the factory are determined at run-time.
+The abstract Creationaldesignpattern.factory pattern is used to provide a client with a set of related or dependant objects. The "family" of objects created by the Creationaldesignpattern.factory are determined at run-time.
 
 ## UML :
 
@@ -431,12 +431,12 @@ Square Style
 >
 
 ## Protection Proxy
-The proxy pattern is used to provide a surrogate or placeholder object, which references an underlying object. Protection proxy is restricting access.
+The Structuraldesignpatterns.proxy pattern is used to provide a surrogate or placeholder object, which references an underlying object. Protection Structuraldesignpatterns.proxy is restricting access.
 
 
 ## UML :
 
-<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/proxy.png"/>
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/Structuraldesignpatterns.proxy.png"/>
 
 ### Example:
 
@@ -494,11 +494,11 @@ Signature Acceptance
 
 
 ## Decorator
-The decorator pattern is used to extend or alter the functionality of objects at run-time by wrapping them in an object of a decorator class. This provides a flexible alternative to using inheritance to modify behaviour.
+The Structuraldesignpatterns.decorator pattern is used to extend or alter the functionality of objects at run-time by wrapping them in an object of a Structuraldesignpatterns.decorator class. This provides a flexible alternative to using inheritance to modify behaviour.
 
 ## UML :
 
-<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/decorator.png"/>
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/Structuraldesignpatterns.decorator.png"/>
 
 ### Example:
 
@@ -563,7 +563,7 @@ Baking Cake
 
 
 ## Adapter
-The adapter pattern is used to provide a link between two otherwise incompatible types by wrapping the "adaptee" with a class that supports the interface required by the client.
+The Structuraldesignpatterns.adapter pattern is used to provide a link between two otherwise incompatible types by wrapping the "adaptee" with a class that supports the interface required by the client.
 
 ## UML :
 
@@ -608,27 +608,27 @@ class VoltAdapter(private val volt220: Volt220) : VoltFive {
 
 ```kotlin
     val volt220 = Volt220()
-    val adapter = VoltAdapter(volt220)
+    val Structuraldesignpatterns.adapter = VoltAdapter(volt220)
 
-    val volt = adapter.provideVoltFive()
-    println("After adapter, the volt is : $volt")
+    val volt = Structuraldesignpatterns.adapter.provideVoltFive()
+    println("After Structuraldesignpatterns.adapter, the volt is : $volt")
 ```
 
 ### Outpu:
 
 ```code
-After adapter, the volt is :5
+After Structuraldesignpatterns.adapter, the volt is :5
 ```
 
 
 
 
 ## Facade
-The facade pattern is used to define a simplified interface to a more complex subsystem.
+The Structuraldesignpatterns.facade pattern is used to define a simplified interface to a more complex subsystem.
 
 ## UML :
 
-<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/facade.png"/>
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/Structuraldesignpatterns.facade.png"/>
 
 ### Example:
 
