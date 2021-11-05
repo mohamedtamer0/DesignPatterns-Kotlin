@@ -754,6 +754,344 @@ Prawn Risotto
 
 
 
+## Flyweight
+Flyweight is a structural design pattern that lets you fit more objects into the available amount of RAM by sharing common parts of state between multiple objects instead of keeping all of the data in each object.
+
+## UML :
+
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/flyweight.png"/>
+
+### Example:
+
+```kotlin
+interface Ticket {
+    fun printTicket(time: String?, seat: String?)
+}
+
+```
+
+```kotlin
+object TicketFactory {
+    private val map: MutableMap<String, Ticket> = ConcurrentHashMap()
+    fun getTicket(movieName: String): Ticket? {
+        return if (map.containsKey(movieName)) {
+            map[movieName]
+        } else {
+            val ticket: Ticket = MovieTicket(movieName)
+            map[movieName] = ticket
+            ticket
+        }
+    }
+}
+
+
+```
+
+```kotlin
+class MovieTicket(private val movieName: String) : Ticket {
+    private val price: String
+
+    init {
+        price = "Price " + Random().nextInt(100)
+    }
+
+    override fun printTicket(time: String?, seat: String?) {
+        println("+-------------------+")
+        System.out.printf("| %-12s    |\n", movieName)
+        println("|                   |")
+        System.out.printf("|       %-12s|\n", time)
+        System.out.printf("|       %-12s|\n", seat)
+        System.out.printf("|       %-12s|\n", price)
+        println("|                   |")
+        println("+-------------------+")
+    }
+
+
+}
+
+```
+
+
+
+### Usage :
+
+```kotlin
+    val movieTicket1 = TicketFactory.getTicket("Transformers 5") as MovieTicket
+    movieTicket1.printTicket("14:00-16:30", "Seat  D-5")
+    val movieTicket2 = TicketFactory.getTicket("Transformers 5") as MovieTicket
+    movieTicket2.printTicket("14:00-16:30", "Seat  F-6")
+    val movieTicket3 = TicketFactory.getTicket("Transformers 5") as MovieTicket
+    movieTicket3.printTicket("18:00-22:30", "Seat  A-2")
+```
+
+### Outpu:
+
+```code
++-------------------+
+| Transformers 5    |
+|                   |
+|       14:00-16:30 |
+|       Seat  D-5   |
+|       Price 33    |
+|                   |
++-------------------+
++-------------------+
+| Transformers 5    |
+|                   |
+|       14:00-16:30 |
+|       Seat  F-6   |
+|       Price 33    |
+|                   |
++-------------------+
++-------------------+
+| Transformers 5    |
+|                   |
+|       18:00-22:30 |
+|       Seat  A-2   |
+|       Price 33    |
+|                   |
++-------------------+
+
+```
+
+
+
+
+
+##
+## Behavioral Patterns : 
+
+>In software engineering, behavioral design patterns are design patterns that identify common communication patterns between objects and realize these patterns. By doing so, these patterns increase flexibility in carrying out this communication.
+>
+
+
+## Template Method
+Template Method is a behavioral design pattern that defines the skeleton of an algorithm in the superclass but lets subclasses override specific steps of the algorithm without changing its structure.
+
+## UML :
+
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/template_method.png"/>
+
+### Example:
+
+```kotlin
+abstract class AssemblyLine {
+
+    protected open fun onProduceShell() {
+        println("Produce Shell")
+    }
+
+    protected open fun onProduceComponents() {
+        println("Produce some components")
+    }
+
+    protected open fun onAssemblyComponents() {
+        println("Assembly Components")
+    }
+
+    protected open fun onTestProducts() {
+        println("Test Products")
+    }
+
+    protected open fun onProductPacking() {
+        println("Product Packing")
+    }
+
+    fun product() {
+        println("+------Start Product------+")
+        onProduceShell()
+        onProduceComponents()
+        onAssemblyComponents()
+        onTestProducts()
+        onProduceComponents()
+        onProductPacking()
+        println("+------Finish Product------+")
+    }
+
+}
+
+```
+
+```kotlin
+class ComputerAssemblyLine : AssemblyLine() {
+
+    override fun onProduceShell() {
+        println("Product Aluminum housing and Liquid Crystal Display")
+    }
+
+    override fun onProduceComponents() {
+        println("Product Components and keyboard")
+    }
+
+    override fun onProductPacking() {
+        println("Pack and Mark the Apple trademark")
+    }
+
+}
+```
+
+```kotlin
+class RadioAssemblyLine : AssemblyLine() {
+
+    override fun onProduceComponents() {
+        println("Product Radio Components and Antennas")
+    }
+
+}
+
+```
+
+
+
+### Usage :
+
+```kotlin
+    var assemblyLine: AssemblyLine = RadioAssemblyLine()
+    assemblyLine.product()
+
+    println()
+
+    assemblyLine = ComputerAssemblyLine()
+    assemblyLine.product()
+```
+
+### Outpu:
+
+```code
++------Start Product------+
+Product Aluminum housing and Liquid Crystal Display
+Product Components and keyboard
+Assembly Components
+Test Products
+Product Components and keyboard
+Pack and Mark the Apple trademark
++------Finish Product------+
+
++------Start Product------+
+Produce Shell
+Product Radio Components and Antennas
+Assembly Components
+Test Products
+Product Radio Components and Antennas
+Product Packing
++------Finish Product------+
+
+```
+
+
+
+## Chain of Responsibility
+The chain of responsibility pattern is used to process varied requests, each of which may be dealt with by a different handler.
+
+## UML :
+
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/chain_of_responsibility.png"/>
+
+### Example:
+
+```kotlin
+abstract class Handler {
+    var successor: Handler? = null
+
+    abstract fun capital(): Int
+    abstract fun handle(money: Int)
+    fun handleRequest(money: Int) {
+        if (money <= capital()) {
+            handle(money)
+        } else {
+            if (null != successor) {
+                successor!!.handleRequest(money)
+            } else {
+                println("Your requested funds could not be approved")
+            }
+        }
+    }
+}
+
+```
+
+```kotlin
+class Tutor:Handler() {
+    override fun capital(): Int {
+        return 100
+    }
+
+    override fun handle(money: Int) {
+        println("Approved by the instructor: approved $money Dollar")
+    }
+}
+```
+
+```kotlin
+class Secretary:Handler() {
+    override fun capital(): Int {
+        return 1000
+    }
+
+    override fun handle(money: Int) {
+        println("Secretary approved: approved $money Dollar")
+    }
+}
+```
+
+```kotlin
+class Principal: Handler() {
+    override fun capital(): Int {
+        return 1000
+    }
+
+    override fun handle(money: Int) {
+        println("Approved by the principal: approved $money Dollar")
+    }
+}
+
+```
+
+```kotlin
+class Dean:Handler() {
+    override fun capital(): Int {
+        return 5000
+    }
+
+    override fun handle(money: Int) {
+        println("Dean approved: approved $money Dollar")
+    }
+}
+
+```
+
+
+
+### Usage :
+
+```kotlin
+    val tutor = Tutor()
+    val secretary = Secretary()
+    val dean = Dean()
+    val principal = Principal()
+
+    tutor.successor = secretary
+    secretary.successor = dean
+    dean.successor = principal
+    principal.successor = null
+
+    tutor.handleRequest(12000)
+    secretary.handleRequest(100)
+```
+
+### Outpu:
+
+```code
+Your requested funds could not be approved
+Secretary approved: approved 100 Dollar
+
+```
+
+
+
+
+
+
 
 
 
