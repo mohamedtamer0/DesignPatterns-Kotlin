@@ -1090,6 +1090,785 @@ Secretary approved: approved 100 Dollar
 
 
 
+## Command
+The command pattern is used to express a request, including the call to be made and all of its required parameters, in a command object. The command may then be executed immediately or held for later use.
+
+## UML :
+
+<img src="https://user-images.githubusercontent.com/51374446/140611296-48c950e8-1969-4b77-a260-adc682472754.png"/>
+
+
+### Example:
+
+```kotlin
+interface OrderCommand {
+    fun execute()
+}
+
+```
+
+```kotlin
+class OrderPayCommand(private val id: Long) : OrderCommand {
+    override fun execute() = println("Paying for order with id: $id")
+}
+```
+
+```kotlin
+class OrderAddCommand(private val id:Long) : OrderCommand {
+    override fun execute() = println("Adding Order With id : $id")
+}
+```
+
+```kotlin
+class CommandProcessor {
+    private val queue = ArrayList<OrderCommand>()
+
+    fun addToQueue(orderCommand: OrderCommand) :CommandProcessor =
+        apply {
+            queue.add(orderCommand)
+        }
+
+    fun processCommands():CommandProcessor =
+        apply {
+            queue.forEach{it.execute()}
+            queue.clear()
+        }
+}
+
+```
+
+
+### Usage :
+
+```kotlin
+fun main() = command()
+fun command() {
+    CommandProcessor()
+        .addToQueue(OrderAddCommand(1L))
+        .addToQueue(OrderAddCommand(2L))
+        .addToQueue(OrderPayCommand(2L))
+        .addToQueue(OrderPayCommand(1L))
+        .processCommands()
+}
+```
+
+### Outpu:
+
+```code
+Adding Order With id : 1
+Adding Order With id : 2
+Paying for order with id : 2
+Paying for order with id : 1
+
+```
+
+
+
+
+## Iterator
+Iterator is a behavioral design pattern that lets you traverse elements of a collection without exposing its underlying representation (list, stack, tree, etc.).
+
+## UML :
+
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/iterator.png"/>
+
+
+### Example:
+
+```kotlin
+interface Iterator<T> {
+     operator fun hasNext(): Boolean
+     operator fun next(): T
+}
+
+```
+
+```kotlin
+interface BookIterable<T> {
+      operator fun iterator(): Iterator<T>?
+}
+
+```
+
+```kotlin
+class Book(private val name: String, private val ISBN: String, private val press: String) {
+    override fun toString(): String {
+        return "Book{" +
+                "name='" + name + '\'' +
+                ", ISBN='" + ISBN + '\'' +
+                ", press='" + press + '\'' +
+                '}'
+    }
+
+}
+```
+
+```kotlin
+class Literature : BookIterable {
+    val literature: Array<Book?>
+
+    operator fun iterator(): Iterator {
+        return LiteratureIterator(literature)
+    }
+
+    init {
+        literature = arrayOfNulls(4)
+        literature[0] = Book("Three Kingdoms", "9787532237357", "Shanghai People's Fine Arts Publishing House")
+        literature[1] = Book("Journey to the West", "9787805200552", "Yuelu Publishing House")
+        literature[2] = Book("Water Margin", "9787020015016", "People's Literature Publishing House")
+        literature[3] = Book("Dream of Red Mansions", "9787020002207", "People's Literature Publishing House")
+    }
+}
+```
+
+```kotlin
+class LiteratureIterator(private val literatures: Array<Book?>) : Iterator {
+    private var index = 0
+    operator fun hasNext(): Boolean {
+        return index < literatures.size - 1 && literatures[index] != null
+    }
+
+    operator fun next(): Book? {
+        return literatures[index++]
+    }
+}
+```
+
+
+
+
+### Usage :
+
+```kotlin
+fun main() {
+    val literature = Literature()
+    itr(literature.Behavioraldesignpatterns.iterator())
+}
+
+fun itr(Behavioraldesignpatterns.iterator: Iterator<T>) {
+    while (Behavioraldesignpatterns.iterator.hasNext()) {
+        println(Behavioraldesignpatterns.iterator.next())
+    }
+}
+```
+
+### Outpu:
+
+```code
+Book{name='Three Kingdoms', ISBN='9787532237357', press='Shanghai People's Fine Arts Publishing House'}
+Book{name='Journey to the West', ISBN='9787805200552', press='Yuelu Publishing House'}
+Book{name='Water Margin', ISBN='9787020015016', press='People's Literature Publishing House'}
+```
+
+
+
+## Mediator
+Mediator design pattern is used to provide a centralized communication medium between different objects in a system. This pattern is very helpful in an enterprise application where multiple objects are interacting with each other.
+
+## UML :
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Mediator_design_pattern.png"/>
+
+
+### Example:
+
+```kotlin
+class ChatMediator {
+
+    private val users: MutableList<ChatUser> = ArrayList()
+
+    fun sendMessage(msg: String, user: ChatUser) {
+        users
+            .filter { it != user }
+            .forEach {
+                it.receive(msg)
+            }
+    }
+
+    fun addUser(user: ChatUser): ChatMediator =
+        apply { users.add(user) }
+
+}
+```
+
+```kotlin
+class ChatUser(private val mediator: ChatMediator, val name: String) {
+    fun send(msg: String) {
+        println("$name: Sending Message= $msg")
+        mediator.sendMessage(msg, this)
+    }
+
+    fun receive(msg: String) {
+        println("$name: Message received: $msg")
+    }
+}
+
+```
+
+
+
+### Usage :
+
+```kotlin
+    val mediator = ChatMediator()
+    val john = ChatUser(mediator, "Tamer")
+
+    mediator
+        .addUser(ChatUser(mediator, "Mohab"))
+        .addUser(ChatUser(mediator, "Mohand"))
+        .addUser(ChatUser(mediator, "Habiba"))
+        .addUser(john)
+    john.send("Hi everyone!")
+```
+
+### Outpu:
+
+```code
+Mohab: Message received: Hi everyone!
+Mohand: Message received: Hi everyone!
+Habiba: Message received: Hi everyone!
+```
+
+
+
+
+## Memento
+The memento pattern is a software design pattern that provides the ability to restore an object to its previous state (undo via rollback).
+
+## UML :
+
+<img src="https://raw.githubusercontent.com/innofang/designpatterns/master/uml/memento.png"/>
+
+
+### Example:
+
+```java
+data class Memento(val state: String)
+```
+
+```kotlin
+class CareTaker {
+    private val mementoList = ArrayList<Memento>()
+
+    fun saveState(state: Memento) {
+        mementoList.add(state)
+    }
+
+    fun restore(index: Int): Memento {
+        return mementoList[index]
+    }
+}
+
+```
+
+```kotlin
+class Originator(var state: String) {
+
+    fun createMemento(): Memento {
+        return Memento(state)
+    }
+
+    fun restore(memento: Memento) {
+        state = memento.state
+    }
+}
+
+```
+
+
+
+
+### Usage :
+
+```kotlin
+    val originator = Originator("initial Behavioraldesignpatterns.state")
+    val careTaker = CareTaker()
+    careTaker.saveState(originator.createMemento())
+
+    originator.state = "State #1"
+    originator.state = "State #2"
+    careTaker.saveState(originator.createMemento())
+
+    originator.state = "State #3"
+    println("Current State: " + originator.state)
+
+    originator.restore(careTaker.restore(1))
+    println("Second saved Behavioraldesignpatterns.state: " + originator.state)
+
+
+    originator.restore(careTaker.restore(0))
+    println("First saved Behavioraldesignpatterns.state: " + originator.state)
+```
+
+### Outpu:
+
+```code
+Current State: State #3
+Second saved Behavioraldesignpatterns.state: State #2
+First saved Behavioraldesignpatterns.state: initial Behavioraldesignpatterns.state
+```
+
+
+
+
+## Observer
+The observer pattern is used to allow an object to publish changes to its state. Other objects subscribe to be immediately notified of any changes.
+
+## UML :
+
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/observer.png"/>
+
+
+### Example:
+
+```kotlin
+interface Observer {
+    fun update(magazine: String)
+}
+
+```
+
+```kotlin
+interface Subject {
+    fun registerObserver(observer: Observer)
+    fun removeObserver(observer: Observer)
+    fun notifyObservers()
+}
+
+```
+
+```kotlin
+class Magazine : Subject {
+    private val observerList: MutableList<Observer>
+
+    init {
+        observerList = ArrayList()
+    }
+
+    private var magazine: String? = null
+    override fun registerObserver(observer: Observer) {
+        observerList.add(observer)
+    }
+
+    override fun removeObserver(observer: Observer) {
+        observerList.remove(observer)
+    }
+
+    override fun notifyObservers() {
+        for (i in observerList.indices) {
+            val observer = observerList[i]
+            observer.update(magazine!!)
+        }
+    }
+
+    fun setMagazine(magazine: String?) {
+        this.magazine = magazine
+        notifyObservers()
+    }
+}
+```
+
+```kotlin
+class Subscriber(magazine: Subject, subscriber: String) : Observer {
+    private val subscriber: String
+    override fun update(magazine: String) {
+        println("Dear$subscriber: Your magazine has arrived, and today’s magazine is called《$magazine》")
+    }
+
+    init {
+        magazine.registerObserver(this)
+        this.subscriber = subscriber
+    }
+}
+```
+
+```kotlin
+class Bookstore(magazine: Subject) : Observer {
+    override fun update(magazine: String) {
+        println("Our shop updates the magazine today：《$magazine》")
+    }
+
+    init {
+        magazine.registerObserver(this)
+    }
+}
+```
+
+
+
+### Usage :
+
+```kotlin
+    val magazine = Magazine()
+
+    val mohamed = Subscriber(magazine, "Mohamed")
+    val tamer = Subscriber(magazine, "Tamer")
+    val habiba = Subscriber(magazine, "Habiba")
+    val bookstore = Bookstore(magazine)
+
+    magazine.setMagazine("Shock! Today's magazine since...")
+```
+
+### Outpu:
+
+```code
+DearMohamed: Your magazine has arrived, and today’s magazine is called《Shock! Today's magazine since...》
+DearTamer: Your magazine has arrived, and today’s magazine is called《Shock! Today's magazine since...》
+DearHabiba: Your magazine has arrived, and today’s magazine is called《Shock! Today's magazine since...》
+Our shop updates the magazine today：《Shock! Today's magazine since...》
+```
+
+
+
+
+
+## State
+The state pattern is used to alter the behaviour of an object as its internal state changes. The pattern allows the class for an object to apparently change at run-time.
+
+## UML :
+
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/state.png"/>
+
+
+### Example:
+
+```kotlin
+interface GameState {
+    fun killMonster()
+    fun gainExperience()
+    fun next()
+    fun pick()
+}
+
+```
+
+```kotlin
+class Player {
+    private lateinit var state: GameState
+
+    private fun setState(state: GameState?) {
+        this.state = state!!
+    }
+
+    fun gameStart() {
+        setState(GameStartState())
+        println("\n-----Game Start, ready to fight-----\n")
+    }
+
+    fun gameOver() {
+        setState(GameOverState())
+        println("\n-----         Game Over        -----\n")
+    }
+
+    fun killMonster() {
+        state.killMonster()
+    }
+
+    fun gainExperience() {
+        state.gainExperience()
+    }
+
+    operator fun next() {
+        state.next()
+    }
+
+    fun pick() {
+        state.pick()
+    }
+}
+
+```
+
+```kotlin
+class GameStartState : GameState {
+    override fun killMonster() {
+        println("Kill a Monster")
+    }
+
+
+    override fun gainExperience() {
+        println("Gain 5 EXP")
+    }
+
+
+    override operator fun next() {
+        println("Good! please enter next level")
+    }
+
+
+    override fun pick() {
+        println("Wow! You pick a good thing")
+    }
+}
+
+```
+
+```kotlin
+class GameOverState : GameState {
+    override fun killMonster() {
+        println("Please start game first")
+    }
+
+    override fun gainExperience() {}
+    override operator fun next() {
+        println("You want to challenge again?")
+    }
+
+    override fun pick() {
+        println("Please start game first")
+    }
+}
+```
+
+
+
+### Usage :
+
+```kotlin
+    val player = Player()
+    player.gameStart()
+    player.killMonster()
+    player.gainExperience()
+    player.next()
+    player.pick()
+    player.gameOver()
+    player.next()
+    player.killMonster()
+    player.pick()
+```
+
+### Outpu:
+
+```code
+-----Game Start, ready to fight-----
+
+Kill a Monster
+Gain 5 EXP
+Good! please enter next level
+Wow! You pick a good thing
+
+-----         Game Over        -----
+
+You want to challenge again?
+Please start game first
+Please start game first
+
+```
+
+
+
+
+
+## Strategy
+The strategy pattern is used to create an interchangeable family of algorithms from which the required process is chosen at run-time.
+
+## UML :
+
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/strategy.png"/>
+
+
+### Example:
+
+```kotlin
+interface Strategy {
+    fun transportation()
+}
+```
+
+```kotlin
+class Context {
+    var goToStrategy:Strategy? = null
+
+    fun take() {
+        goToStrategy?.transportation()
+    }
+    
+}
+```
+
+```kotlin
+class GoToCairo : Strategy {
+    override fun transportation() {
+        println("take my car")
+    }
+}
+```
+
+```kotlin
+class GoToGona:Strategy {
+    override fun transportation() {
+        println("take plane")
+    }
+}
+```
+
+
+
+### Usage :
+
+```kotlin
+    val context = Context()
+    context.goToStrategy = GoToCairo()
+    context.take()
+    context.goToStrategy = GoToGona()
+    context.take()
+```
+
+### Outpu:
+
+```code
+take my car
+take plane
+
+```
+
+
+
+
+
+
+## Visitor
+The visitor pattern is used to separate a relatively complex set of structured data classes from the functionality that may be performed upon the data that they hold.
+
+## UML :
+
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/visitor.png"/>
+
+
+### Example:
+
+```kotlin
+interface Interviewer {
+    fun visit(student: Student)
+    fun visit(engineer: Engineer)
+}
+
+```
+
+```kotlin
+interface Applicant {
+    fun accept(visitor: Interviewer)
+}
+
+```
+
+```kotlin
+class Engineer(var name: String, var workExperience: Int, var projectNumber: Int) : Applicant {
+    override fun accept(visitor: Interviewer) {
+        visitor.visit(this)
+    }
+}
+```
+
+```kotlin
+class Student(var name: String, var gpa: Double, var major: String) : Applicant {
+    override fun accept(visitor: Interviewer) {
+        visitor.visit(this)
+    }
+}
+```
+
+```kotlin
+class Leader : Interviewer {
+    override fun visit(student: Student) {
+        println("Student  " + student.name + "'s gpa is " + student.gpa)
+    }
+
+    override fun visit(engineer: Engineer) {
+        println(
+            "Engineer  " + engineer.name + "'s number of projects is " + engineer.projectNumber
+        )
+    }
+}
+```
+
+```kotlin
+class LaborMarket {
+    var applicants: MutableList<Applicant> = ArrayList()
+    fun showApplicants(visitor: Interviewer?) {
+        for (applicant in applicants) {
+            applicant.accept(visitor!!)
+        }
+    }
+
+    init {
+        applicants.add(Student("Tamer", 3.2, "Computer Science"))
+        applicants.add(Student("Mohamed", 3.4, "Network Engineer"))
+        applicants.add(Student("Habiba", 3.4, "Computer Science"))
+        applicants.add(Engineer("Ahmed", 4, 15))
+        applicants.add(Engineer("Mohand", 3, 10))
+        applicants.add(Engineer("Mohab", 6, 20))
+    }
+}
+
+```
+
+
+
+### Usage :
+
+```kotlin
+    val laborMarket = LaborMarket()
+    println("===== Round 1: Leader =====")
+    laborMarket.showApplicants(Leader())
+
+    /*
+        You can add more rounds and implements .............
+         */
+```
+
+### Outpu:
+
+```code
+===== Round 1: Leader =====
+Student  Tamer's gpa is 3.2
+Student  Mohamed's gpa is 3.4
+Student  Habiba's gpa is 3.4
+Engineer  Ahmed's number of projects is 15
+Engineer  Mohand's number of projects is 10
+Engineer  Mohab's number of projects is 20
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
