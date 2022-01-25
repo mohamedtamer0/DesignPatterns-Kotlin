@@ -2,6 +2,11 @@ package Behavioraldesignpatterns.observer
 
 class Magazine : Subject {
     private val observerList: MutableList<Observer>
+
+    init {
+        observerList = ArrayList()
+    }
+
     private var magazine: String? = null
     override fun registerObserver(observer: Observer) {
         observerList.add(observer)
@@ -21,9 +26,5 @@ class Magazine : Subject {
     fun setMagazine(magazine: String?) {
         this.magazine = magazine
         notifyObservers()
-    }
-
-    init {
-        observerList = ArrayList()
     }
 }

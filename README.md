@@ -90,17 +90,16 @@ Counter 1 : 4
 Counter 2 : 4
 ```
 ##
-## Creationaldesignpattern.prototype
-The Prototype pattern delegates the cloning process to the actual objects that are being cloned. The patte![Creationaldesignpattern.prototype]
-rn declares a common interface for all objects that support cloning. This interface lets you clone an object without coupling your code to the class of that object. Usually, such an interface contains just a single clone method.
+## prototype
+The Prototype pattern delegates the cloning process to the actual objects that are being cloned. The pattern declares a common interface for all objects that support cloning. This interface lets you clone an object without coupling your code to the class of that object. Usually, such an interface contains just a single clone method.
 
 The implementation of the clone method is very similar in all classes. The method creates an object of the current class and carries over all of the field values of the old object into the new one. You can even copy private fields because most programming languages let objects access private fields of other objects that belong to the same class.
 
-An object that supports cloning is called a Creationaldesignpattern.prototype. When your objects have dozens of fields and hundreds of possible configurations, cloning them might serve as an alternative to subclassing.
+An object that supports cloning is called a prototype. When your objects have dozens of fields and hundreds of possible configurations, cloning them might serve as an alternative to subclassing.
 
 ## UML :
 
-<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/Creationaldesignpattern.prototype.png"/>
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/prototype.png"/>
 
 ### Example:
 
@@ -202,14 +201,14 @@ Image name: A new image
 
 ```
 
-
 ##
 ## Builder
-The Creationaldesignpattern.builder pattern is used to create complex objects with constituent parts that must be created in the same order or using a specific algorithm. An external class controls the construction algorithm.
+The builder pattern is used to create complex objects with constituent parts that must be created in the same order or using a specific algorithm. An external class controls the construction algorithm.
 
 ## UML :
 
-<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/Creationaldesignpattern.builder.png"/>
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/builder.png"/>
+
 
 ### Example:
 
@@ -425,18 +424,18 @@ Square Style
 
 
 ##
-## Structural Patterns : 
+## Structural Patterns :
 
 >In software engineering, structural design patterns are design patterns that ease the design by identifying a simple way to realize relationships between entities.
 >
 
 ## Protection Proxy
-The Structuraldesignpatterns.proxy pattern is used to provide a surrogate or placeholder object, which references an underlying object. Protection Structuraldesignpatterns.proxy is restricting access.
+The proxy pattern is used to provide a surrogate or placeholder object, which references an underlying object. Protection proxy is restricting access.
 
 
 ## UML :
 
-<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/Structuraldesignpatterns.proxy.png"/>
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/proxy.png"/>
 
 ### Example:
 
@@ -494,11 +493,11 @@ Signature Acceptance
 
 
 ## Decorator
-The Structuraldesignpatterns.decorator pattern is used to extend or alter the functionality of objects at run-time by wrapping them in an object of a Structuraldesignpatterns.decorator class. This provides a flexible alternative to using inheritance to modify behaviour.
+The decorator pattern is used to extend or alter the functionality of objects at run-time by wrapping them in an object of a decorator class. This provides a flexible alternative to using inheritance to modify behaviour.
 
 ## UML :
 
-<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/Structuraldesignpatterns.decorator.png"/>
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/decorator.png"/>
 
 ### Example:
 
@@ -563,7 +562,7 @@ Baking Cake
 
 
 ## Adapter
-The Structuraldesignpatterns.adapter pattern is used to provide a link between two otherwise incompatible types by wrapping the "adaptee" with a class that supports the interface required by the client.
+The adapter pattern is used to provide a link between two otherwise incompatible types by wrapping the "adaptee" with a class that supports the interface required by the client.
 
 ## UML :
 
@@ -624,11 +623,11 @@ After Structuraldesignpatterns.adapter, the volt is :5
 
 
 ## Facade
-The Structuraldesignpatterns.facade pattern is used to define a simplified interface to a more complex subsystem.
+The facade pattern is used to define a simplified interface to a more complex subsystem.
 
 ## UML :
 
-<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/Structuraldesignpatterns.facade.png"/>
+<img src="https://raw.githubusercontent.com/InnoFang/DesignPatterns/master/uml/facade.png"/>
 
 ### Example:
 

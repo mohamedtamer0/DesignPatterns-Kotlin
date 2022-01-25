@@ -2,8 +2,8 @@ package Creationaldesignpattern.singletonpattern
 
 
 fun main() {
-    val obj1: Counter = Counter.instance
-    val obj2: Counter = Counter.instance
+    val obj1 = Counter.MySingleton.instance
+    val obj2 = Counter.MySingleton.instance
     obj1.addOne()
     obj2.addOne()
     println("Counter 1 : ${obj1.count}")
@@ -13,6 +13,8 @@ fun main() {
     obj2.addOne()
     println("Counter 1 : ${obj1.count}")
     println("Counter 2 : ${obj2.count}")
+    println(obj1)
+    println(obj2)
 
 
 }
@@ -23,7 +25,7 @@ class Counter private constructor() {
         count++
     }
 
-    companion object {
+    object MySingleton {
         val instance = Counter()
     }
 }

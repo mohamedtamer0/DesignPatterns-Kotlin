@@ -12,7 +12,6 @@ fun main() {
     originator.state = "State #3"
     println("Current State: " + originator.state)
 
-
     originator.restore(careTaker.restore(1))
     println("Second saved Behavioraldesignpatterns.state: " + originator.state)
 

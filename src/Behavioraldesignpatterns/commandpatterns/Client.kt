@@ -2,7 +2,6 @@ package Behavioraldesignpatterns.commandpatterns
 
 
 fun main() = command()
-
 fun command() {
     CommandProcessor()
         .addToQueue(OrderAddCommand(1L))
